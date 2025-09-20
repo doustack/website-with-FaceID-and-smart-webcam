@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cyber Sentinel — Grid</title>
+  <meta name="description" content="Hacking & Security Services — Grid Edition" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;800&family=Manrope:wght@300;400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#07080f; --grid:#101222; --cyan:#00edff; --mag:#ff3af2; --lime:#9dff57; --text:#eff6ff; --muted:#9fb3d0;
+    }
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
+    body{ margin:0; background: radial-gradient(900px 400px at 120% -20%, rgba(255,58,242,0.12), transparent 60%), radial-gradient(900px 400px at -20% 120%, rgba(0,237,255,0.12), transparent 60%), linear-gradient(180deg,#0a0c18,#07080f); color:var(--text); font-family: Manrope, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; overflow-x:hidden; }
+
+    /* Grid plane */
+    .plane{ position:fixed; inset:0; z-index:0; perspective:900px; pointer-events:none; }
+    .grid{ position:absolute; left:50%; bottom:-120px; width:160vw; height:70vh; transform: translateX(-50%) rotateX(65deg); background-image: linear-gradient(0deg, rgba(0,237,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,58,242,0.15) 1px, transparent 1px); background-size: 40px 40px; box-shadow: inset 0 -40px 120px rgba(0,0,0,0.8); }
+    .scan{ position:absolute; inset:0; background: repeating-linear-gradient(180deg, rgba(255,255,255,0.06) 0, rgba(255,255,255,0.06) 2px, transparent 6px, transparent 12px); mix-blend-mode: overlay; opacity:.3; animation: scan 6s linear infinite; }
+    @keyframes scan{ to{ transform: translateY(12px); } }
+
+    /* Navbar */
+    .nav{ position:fixed; top:0; left:0; right:0; z-index:3; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 22px; background: rgba(10,12,24,0.5); backdrop-filter: blur(8px); border-bottom:1px solid rgba(255,255,255,0.08); }
+    .brand{ display:flex; gap:10px; align-items:center; font-family: Orbitron, monospace; letter-spacing:1px; font-weight:800; color:#cfe9ff; }
+    .brand .cube{ width:14px; height:14px; background: conic-gradient(from 180deg, var(--cyan), var(--mag), var(--lime), var(--cyan)); border-radius: 3px; box-shadow: 0 0 14px rgba(0,237,255,0.6); }
+    .menu{ display:flex; gap:14px; align-items:center; }
+    .menu a{ color:#b6c9e6; text-decoration:none; font-weight:800; font-size:14px; opacity:.86; }
+    .menu a:hover{ opacity:1; color:#fff; }
+
+    /* Hero */
+    .hero{ position:relative; z-index:1; padding-top:120px; padding-bottom:80px; }
+    .container{ width:min(1100px,92%); margin:0 auto; }
+
+    .wrap{ display:grid; grid-template-columns:1.2fr 1fr; gap:24px; align-items:center; }
+    @media (max-width:980px){ .wrap{ grid-template-columns:1fr; } }
+
+    h1{ font-family: Orbitron, monospace; font-size: clamp(32px, 5vw, 62px); line-height:1.05; margin:10px 0; text-shadow: 0 0 18px rgba(157,255,87,0.25); }
+    .lead{ color:var(--muted); line-height:1.8; font-size: clamp(14px, 2.6vw, 18px); }
+
+    .buttons{ display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; }
+    .btn{ position:relative; display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:14px 18px; border-radius:14px; color:var(--text); text-decoration:none; font-weight:900; letter-spacing:.6px; border:1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); box-shadow: 0 10px 26px rgba(0,0,0,0.45); transition: transform .15s ease, filter .2s ease; }
+    .btn:hover{ transform: translateY(-2px); filter: brightness(1.08); }
+    .btn.cyan{ box-shadow: inset 0 0 0 2px rgba(0,237,255,0.18), 0 0 22px rgba(0,237,255,0.18); border-color: rgba(0,237,255,0.35); }
+    .btn.mag{ box-shadow: inset 0 0 0 2px rgba(255,58,242,0.18), 0 0 22px rgba(255,58,242,0.18); border-color: rgba(255,58,242,0.35); }
+
+    /* Tilt card */
+    .panel{ position:relative; border-radius:18px; overflow:hidden; border:1px solid rgba(255,255,255,0.12); background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .panel .top{ padding: 22px; }
+    .panel .viz{ height: 480px; position:relative; display:grid; place-items:center; overflow:hidden; background: radial-gradient(400px 260px at 70% 30%, rgba(0,237,255,0.14), transparent 60%), radial-gradient(600px 300px at 20% 80%, rgba(255,58,242,0.14), transparent 70%); }
+    .shape{ width: 280px; aspect-ratio: 1/1; border-radius: 24px; background: conic-gradient(from 0deg, rgba(0,237,255,0.9), rgba(255,58,242,0.9), rgba(157,255,87,0.9), rgba(0,237,255,0.9)); filter: blur(1px) saturate(1.2); transform: rotate(45deg); animation: bob 6s ease-in-out infinite; box-shadow: 0 0 60px rgba(0,237,255,0.25), inset 0 0 60px rgba(255,58,242,0.15); }
+    @keyframes bob{ 50%{ transform: rotate(45deg) translateY(-14px) scale(1.02); } }
+
+    .footer{ text-align:center; opacity:.82; color:#c7d7f2; font-size:12px; padding: 30px 0 44px; }
+
+    /* Avatar */
+    .avatar{ display:flex; align-items:center; gap:12px; margin:10px 0 6px; }
+    .avatar .photo{ width:56px; height:56px; border-radius:50%; border:1px solid rgba(255,255,255,0.2); box-shadow: 0 0 20px rgba(0,237,255,0.3), 0 0 32px rgba(255,58,242,0.18); object-fit:cover; background: rgba(255,255,255,0.06); }
+    .avatar .meta{ display:grid; line-height:1.2; }
+    .avatar .name{ font-weight:800; letter-spacing:.4px; }
+    .avatar .role{ color:var(--muted); font-size:12px; }
+
+    /* Ticker */
+    .ticker{ position:relative; overflow:hidden; border:1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); border-radius:12px; margin:22px 0; }
+    .ticker .track{ display:flex; gap:28px; padding:10px 0; white-space:nowrap; animation: slide 22s linear infinite; }
+    .ticker .item{ display:inline-flex; gap:10px; align-items:center; opacity:.9; }
+    .dot{ width:8px; height:8px; border-radius:50%; background: var(--cyan); box-shadow:0 0 10px var(--cyan); }
+    @keyframes slide{ to{ transform: translateX(-50%); } }
+
+    /* Stats */
+    .stats{ display:grid; grid-template-columns: repeat(4, 1fr); gap:14px; margin: 18px 0; }
+    .stat{ padding:16px; border:1px solid rgba(255,255,255,0.12); border-radius:12px; background: rgba(255,255,255,0.04); text-align:center; }
+    .stat .num{ font-family: Orbitron, monospace; font-size: clamp(18px, 4vw, 28px); font-weight:800; }
+    .stat .label{ color:var(--muted); font-size:12px; }
+    @media (max-width:900px){ .stats{ grid-template-columns: repeat(2, 1fr); } }
+
+    /* Services grid */
+    .services{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; margin-top: 18px; }
+    .svc{ padding:16px; border:1px solid rgba(255,255,255,0.12); border-radius:14px; background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)); box-shadow: 0 10px 24px rgba(0,0,0,0.4); }
+    .svc h3{ margin: 0 0 6px; font-size:16px; letter-spacing:.4px; }
+    .svc p{ margin:0; color:var(--muted); font-size:13px; line-height:1.6; }
+    @media (max-width:900px){ .services{ grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="plane"><div class="grid"></div><div class="scan"></div></div>
+
+  <nav class="nav">
+    <div class="brand"><span class="cube"></span>Cyber Sentinel</div>
+    <div class="menu">
+      <a href={% url "pages:neon" %}>Neon</a>
+      <a href={% url "pages:matrix" %}>Matrix</a>
+      <a href={% url "pages:grid" %}>Grid</a>
+      <a href={% url "pages:grid" %}>Login</a>
+      <a href={% url "pages:grid" %}>Sign Up</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+          <div class="container">
+
+      <div class="stats">
+        <div class="stat"><div class="num">120+</div><div class="label">Findings Remediated</div></div>
+        <div class="stat"><div class="num">35</div><div class="label">Attack Paths Closed</div></div>
+        <div class="stat"><div class="num">18</div><div class="label">Playbooks Shipped</div></div>
+        <div class="stat"><div class="num">99.9%</div><div class="label">Uptime Monitored</div></div>
+      </div>
+
+      <div class="services">
+        <div class="svc"><h3>Adversary Emulation</h3><p>Threat-informed testing across MITRE ATT&CK to validate controls.</p></div>
+        <div class="svc"><h3>Detection Engineering</h3><p>High-signal rules, CI validation, and dashboards that matter.</p></div>
+        <div class="svc"><h3>Incident Readiness</h3><p>IR plans, tabletops, and comms for crisp executive response.</p></div>
+        <div class="svc"><h3>Identity Security</h3><p>Least privilege, access reviews, and toxic combination checks.</p></div>
+        <div class="svc"><h3>Cloud Security</h3><p>Guardrails, posture baselines, and continuous misconfig scans.</p></div>
+        <div class="svc"><h3>Secure SDLC</h3><p>Threat modeling, code review, and automated dependency hygiene.</p></div>
+      </div>
+      <div class="ticker">
+        <div class="track" id="ticker">
+          <div class="item"><span class="dot"></span><span>Recon modules deployed</span></div>
+          <div class="item"><span class="dot"></span><span>Detections tuned in prod</span></div>
+          <div class="item"><span class="dot"></span><span>Identity risks mitigated</span></div>
+          <div class="item"><span class="dot"></span><span>Cloud perimeter hardened</span></div>
+          <div class="item"><span class="dot"></span><span>Executive summary generated</span></div>
+          <div class="item"><span class="dot"></span><span>Threat model updated</span></div>
+        </div>
+      </div>
+      <div class="wrap">
+        <div class="panel" id="tilt">
+          <div class="top">
+            <div style="display:inline-flex; gap:8px; align-items:center; padding:8px 12px; border-radius:999px; background: rgba(0,237,255,0.08); border:1px solid rgba(0,237,255,0.25); color:#bff8ff; font-weight:900; letter-spacing:.6px; text-transform:uppercase; font-size:12px;">Cyber Grid • Live</div>
+            <h1>Offensive Security That Levels Up Your Defense</h1>
+            <div class="avatar">
+              <img id="avatar" class="photo" alt="Your photo" />
+              <div class="meta">
+                <span class="name">Lead Operator</span>
+                <span class="role">Red Team • Detection Engineering</span>
+              </div>
+            </div>
+            <p class="lead">From red team to secure-by-design, our operators strengthen your posture across the kill chain. Build confidence with validated controls and measurable resilience.</p>
+            <div style="display:grid; gap:10px; margin-top:14px;">
+              <div style="display:flex; gap:10px; align-items:center;"><span style="width:8px; height:8px; border-radius:50%; background:#00edff; box-shadow:0 0 10px #00edff;"></span><span style="font-weight:900; letter-spacing:.4px;">Cloud Perimeter Hardening</span></div>
+              <div style="display:flex; gap:10px; align-items:center;"><span style="width:8px; height:8px; border-radius:50%; background:#ff3af2; box-shadow:0 0 10px #ff3af2;"></span><span style="font-weight:900; letter-spacing:.4px;">Identity & Access Reviews</span></div>
+              <div style="display:flex; gap:10px; align-items:center;"><span style="width:8px; height:8px; border-radius:50%; background:#9dff57; box-shadow:0 0 10px #9dff57;"></span><span style="font-weight:900; letter-spacing:.4px;">Secure SDLC Enablement</span></div>
+            </div>
+          </div>
+          <div class="viz">
+            <div class="shape"></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="top">
+            <div style="display:grid; gap:14px;">
+              <div style="display:flex; gap:12px; align-items:flex-start;">
+                <div style="width:12px; height:12px; border-radius:50%; background:var(--cyan); box-shadow:0 0 12px var(--cyan);"></div>
+                <div>
+                  <div style="font-weight:900; letter-spacing:.5px;">Purple Teaming</div>
+                  <div style="color:var(--muted); font-size:14px;">Collaborative exercises that convert findings into detection and response wins.</div>
+                </div>
+              </div>
+              <div style="display:flex; gap:12px; align-items:flex-start;">
+                <div style="width:12px; height:12px; border-radius:50%; background:var(--mag); box-shadow:0 0 12px var(--mag);"></div>
+                <div>
+                  <div style="font-weight:900; letter-spacing:.5px;">Attack Surface Mgmt</div>
+                  <div style="color:var(--muted); font-size:14px;">Continuous discovery, prioritization, and hardening of internet-exposed assets.</div>
+                </div>
+              </div>
+              <div style="display:flex; gap:12px; align-items:flex-start;">
+                <div style="width:12px; height:12px; border-radius:50%; background:var(--lime); box-shadow:0 0 12px var(--lime);"></div>
+                <div>
+                  <div style="font-weight:900; letter-spacing:.5px;">Secure Engineering</div>
+                  <div style="color:var(--muted); font-size:14px;">Threat modeling, code review, and SDLC guardrails for safer releases.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="footer">© <span id="year"></span> Cyber Sentinel. Design meets defense.</div>
+    </div>
+  </section>
+
+  <script>
+    // Simple tilt interaction
+    const tilt = document.getElementById('tilt');
+    tilt.addEventListener('pointermove', (e) => {
+      const r = tilt.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      tilt.style.transform = `rotateX(${py * -6}deg) rotateY(${px * 8}deg)`;
+    });
+    tilt.addEventListener('pointerleave', () => { tilt.style.transform = 'rotateX(0) rotateY(0)'; });
+
+    // User photo configuration
+    const USER_PHOTO_URL = 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=300&auto=format&fit=crop';
+    const avatarImg = document.getElementById('avatar');
+    avatarImg.src = USER_PHOTO_URL || 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=300&auto=format&fit=crop';
+
+    // Duplicate ticker items to ensure seamless loop
+    const ticker = document.getElementById('ticker');
+    ticker.innerHTML = ticker.innerHTML + ticker.innerHTML;
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html> 

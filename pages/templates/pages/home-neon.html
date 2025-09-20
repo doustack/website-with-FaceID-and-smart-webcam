@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cyber Sentinel — Neon</title>
+  <meta name="description" content="Hacking & Security Services — Neon Edition" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-1: #0b0f1a;
+      --bg-2: #0a0a1a;
+      --neon-1: #00f7ff;
+      --neon-2: #7b00ff;
+      --neon-3: #00ff85;
+      --text: #e6f1ff;
+      --muted: #8aa4c5;
+      --glass: rgba(255,255,255,0.06);
+      --glass-stroke: rgba(255,255,255,0.12);
+      --shadow: 0 10px 30px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.25);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: radial-gradient(1200px 600px at 10% -20%, rgba(0, 247, 255, 0.25), transparent),
+                  radial-gradient(1400px 700px at 110% 10%, rgba(123, 0, 255, 0.25), transparent),
+                  linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Animated gradient fog */
+    .fog {
+      position: fixed; inset: -20vmax; pointer-events: none;
+      background: conic-gradient(from 0deg at 50% 50%, rgba(0,247,255,0.06), rgba(0,255,133,0.06), rgba(123,0,255,0.06), rgba(0,247,255,0.06));
+      filter: blur(60px) saturate(1.3);
+      animation: swirl 22s linear infinite;
+      opacity: .9;
+      mix-blend-mode: screen;
+      z-index: 0;
+    }
+    @keyframes swirl { to { transform: rotate(360deg); } }
+
+    /* Navbar */
+    .nav{ position:fixed; top:0; left:0; right:0; z-index:3; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 22px; background: rgba(10,12,24,0.5); backdrop-filter: blur(8px); border-bottom:1px solid rgba(255,255,255,0.08); }
+    .brand{ display:flex; gap:10px; align-items:center; font-family: Orbitron, monospace; letter-spacing:1px; font-weight:800; color:#cfe9ff; }
+    .brand .cube{ width:14px; height:14px; background: conic-gradient(from 180deg, var(--cyan), var(--mag), var(--lime), var(--cyan)); border-radius: 3px; box-shadow: 0 0 14px rgba(0,237,255,0.6); }
+    .menu{ display:flex; gap:14px; align-items:center; }
+    .menu a{ color:#b6c9e6; text-decoration:none; font-weight:800; font-size:14px; opacity:.86; }
+    .menu a:hover{ opacity:1; color:#fff; }
+
+    /* Hero */
+    .hero { position: relative; padding-top: 120px; padding-bottom: 80px; z-index: 1; }
+    .container { width: min(1100px, 92%); margin: 0 auto; }
+
+    .grid {
+      display: grid; grid-template-columns: 1.2fr 1fr; gap: 36px; align-items: center;
+    }
+    @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid var(--glass-stroke);
+      border-radius: 20px; overflow: hidden; box-shadow: var(--shadow);
+      position: relative; isolation: isolate;
+    }
+    .card::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none; z-index: -1;
+      background: radial-gradient(400px 140px at var(--mx,70%) var(--my,20%), rgba(0,247,255,0.12), transparent 60%),
+                  radial-gradient(600px 200px at var(--mx,20%) var(--my,80%), rgba(123,0,255,0.12), transparent 70%);
+      transition: 0.15s ease;
+    }
+
+    .badge { display: inline-flex; gap: 8px; align-items: center; padding: 8px 12px; border-radius: 999px; background: rgba(0,247,255,0.08); border: 1px solid rgba(0,247,255,0.25); color: #bffaff; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; font-size: 12px; }
+    .badge .led { width: 6px; height: 6px; border-radius: 50%; background: var(--neon-1); box-shadow: 0 0 10px var(--neon-1); }
+
+    h1 { font-family: Orbitron, monospace; font-size: clamp(32px, 5vw, 64px); line-height: 1.05; margin: 14px 0 10px; letter-spacing: 1px; }
+    .lead { color: var(--muted); font-size: clamp(14px, 2.8vw, 18px); line-height: 1.7; margin: 10px 0 24px; }
+
+    .buttons { display: flex; flex-wrap: wrap; gap: 14px; }
+    .btn {
+      position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 14px 18px; border-radius: 14px; border: 1px solid var(--glass-stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      color: var(--text); text-decoration: none; font-weight: 800; letter-spacing: .5px; box-shadow: var(--shadow);
+      transition: transform .15s ease, filter .2s ease, border-color .2s ease;
+    }
+    .btn:hover { transform: translateY(-2px); filter: brightness(1.12); border-color: rgba(0,247,255,0.45); }
+    .btn.neon { border-color: rgba(0,247,255,0.5); box-shadow: 0 0 0 2px rgba(0,247,255,0.06) inset, 0 0 18px rgba(0,247,255,0.15); }
+    .btn.purple { border-color: rgba(123,0,255,0.45); box-shadow: 0 0 0 2px rgba(123,0,255,0.06) inset, 0 0 18px rgba(123,0,255,0.15); }
+
+    .screen {
+      position: relative; height: 520px; display: grid; place-items: center; overflow: hidden;
+      background: radial-gradient(400px 240px at 70% 30%, rgba(0,247,255,0.12), transparent 60%),
+                  radial-gradient(600px 300px at 20% 80%, rgba(123,0,255,0.12), transparent 70%),
+                  linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+    }
+    .scanline { position: absolute; inset: 0; background: repeating-linear-gradient(180deg, rgba(255,255,255,0.06) 0, rgba(255,255,255,0.06) 1px, transparent 3px, transparent 6px); mix-blend-mode: overlay; opacity: .35; pointer-events: none; }
+    .orb {
+      width: 280px; aspect-ratio: 1/1; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fff, var(--neon-1) 25%, rgba(123,0,255,0.5) 60%, transparent 70%);
+      filter: blur(1px) saturate(1.2);
+      animation: float 6s ease-in-out infinite;
+      box-shadow: 0 0 60px rgba(0,247,255,0.25), inset 0 0 60px rgba(123,0,255,0.15);
+    }
+    @keyframes float { 50% { transform: translateY(-14px) scale(1.02); } }
+
+    /* Footer */
+    .footer { opacity: .8; font-size: 12px; color: var(--muted); text-align: center; padding: 26px 0 40px; }
+
+    /* Decorative circuit lines */
+    .circuit {
+      position: absolute; inset: 0; pointer-events: none; opacity: .35;
+      background-image: linear-gradient(90deg, transparent 48%, rgba(0,247,255,0.35) 50%, transparent 52%),
+                        linear-gradient(0deg, transparent 48%, rgba(123,0,255,0.35) 50%, transparent 52%);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(800px 400px at 60% 40%, #000 40%, transparent 70%);
+      mix-blend-mode: screen;
+    }
+  </style>
+</head>
+<body>
+  <div class="fog"></div>
+  <nav class="nav">
+    <div class="brand"><span class="cube"></span>Cyber Sentinel</div>
+    <div class="menu">
+      <a href={% url "pages:neon" %}>Neon</a>
+      <a href={% url "pages:matrix" %}>Matrix</a>
+      <a href={% url "pages:grid" %}>Grid</a>
+      <a href={% url "pages:grid" %}>Login</a>
+      <a href={% url "pages:grid" %}>Sign Up</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="grid">
+        <div class="card" id="copy">
+          <div style="padding: 26px 26px 10px;">
+            <span class="badge"><span class="led"></span> Enterprise Security & Red Team</span>
+            <h1>Proactive Defense. Precision Offense.</h1>
+            <p class="lead">We simulate real-world adversaries to harden your infrastructure and safeguard your brand. From reconnaissance to remediation, our team blends ethical hacking with world-class security engineering.</p>
+            <div style="display:grid; gap:12px; margin-top:14px;">
+              <div style="display:flex; gap:12px; align-items:flex-start;">
+                <div style="width:10px; height:10px; border-radius:50%; background:var(--neon-1); box-shadow:0 0 10px var(--neon-1);"></div>
+                <div>
+                  <div style="font-weight:800; letter-spacing:.4px;">Red Team Operations</div>
+                  <div style="color:var(--muted); font-size:14px;">Goal‑driven campaigns that emulate sophisticated threat actors.</div>
+                </div>
+              </div>
+              <div style="display:flex; gap:12px; align-items:flex-start;">
+                <div style="width:10px; height:10px; border-radius:50%; background:var(--neon-2); box-shadow:0 0 10px var(--neon-2);"></div>
+                <div>
+                  <div style="font-weight:800; letter-spacing:.4px;">Blue Team Uplift</div>
+                  <div style="color:var(--muted); font-size:14px;">From detections to runbooks—turn findings into durable defenses.</div>
+                </div>
+              </div>
+              <div style="display:flex; gap:12px; align-items:flex-start;">
+                <div style="width:10px; height:10px; border-radius:50%; background:var(--neon-3); box-shadow:0 0 10px var(--neon-3);"></div>
+                <div>
+                  <div style="font-weight:800; letter-spacing:.4px;">Secure Engineering</div>
+                  <div style="color:var(--muted); font-size:14px;">Threat modeling, architecture reviews, and SDLC hardening.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="screen">
+            <div class="orb"></div>
+            <div class="scanline"></div>
+            <div class="circuit"></div>
+          </div>
+        </div>
+        <div class="card" id="features">
+          <div style="padding: 22px; display:grid; gap:14px;">
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:12px; height:12px; border-radius:50%; background:var(--neon-1); box-shadow:0 0 12px var(--neon-1);"></div>
+              <div>
+                <div style="font-weight:800; letter-spacing:.4px;">Adversary Emulation</div>
+                <div style="color:var(--muted); font-size:14px;">Threat-driven testing that mirrors APT tradecraft and modern attack chains.</div>
+              </div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:12px; height:12px; border-radius:50%; background:var(--neon-2); box-shadow:0 0 12px var(--neon-2);"></div>
+              <div>
+                <div style="font-weight:800; letter-spacing:.4px;">Blue Team Uplift</div>
+                <div style="color:var(--muted); font-size:14px;">Detection engineering, purple teaming, and resilient defense-in-depth.</div>
+              </div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:12px; height:12px; border-radius:50%; background:var(--neon-3); box-shadow:0 0 12px var(--neon-3);"></div>
+              <div>
+                <div style="font-weight:800; letter-spacing:.4px;">Secure Engineering</div>
+                <div style="color:var(--muted); font-size:14px;">Architecture reviews, threat modeling, and SDLC hardening.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">© <span id="year"></span> Cyber Sentinel. All rights reserved.</div>
+    </div>
+  </section>
+
+  <script>
+    const copy = document.getElementById('copy');
+    copy.addEventListener('pointermove', (e) => {
+      const rect = copy.getBoundingClientRect();
+      const mx = ((e.clientX - rect.left) / rect.width) * 100;
+      const my = ((e.clientY - rect.top) / rect.height) * 100;
+      copy.style.setProperty('--mx', mx + '%');
+      copy.style.setProperty('--my', my + '%');
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html> 
