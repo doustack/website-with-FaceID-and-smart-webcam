@@ -154,5 +154,3 @@ Steps to contribute:
 *(Specify license here — e.g. MIT, GPL, etc. Depending on what is set in repository.)*
 
 ---
-
-If you like — I can also draft a **README + CONTRIBUTING + SECURITY.md** trio (basic template) for this repo — useful if you want to open-source or share with others. Do you want me to build that for you now?
